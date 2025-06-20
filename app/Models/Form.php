@@ -25,6 +25,7 @@ class Form extends Model
         'allow_multiple_responses',
         'collect_email',
         'require_email',
+        'auto_unpublish_at',
     ];
 
     protected $casts = [
@@ -33,6 +34,7 @@ class Form extends Model
         'allow_multiple_responses' => 'boolean',
         'collect_email' => 'boolean',
         'require_email' => 'boolean',
+        'auto_unpublish_at' => 'datetime',
     ];
 
     public function user(): BelongsTo

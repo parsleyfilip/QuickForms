@@ -67,6 +67,17 @@
                         @enderror
                     </div>
 
+                    <div>
+                        <label for="auto_unpublish_at" class="block text-sm font-medium text-gray-700">Auto Unpublish At (optional)</label>
+                        <input type="datetime-local" name="auto_unpublish_at" id="auto_unpublish_at"
+                            value="{{ old('auto_unpublish_at', $form->auto_unpublish_at ? $form->auto_unpublish_at->format('Y-m-d\TH:i') : '') }}"
+                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                        <p class="mt-1 text-xs text-gray-500">Set a date and time to automatically unpublish this form. Leave blank to keep published indefinitely.</p>
+                        @error('auto_unpublish_at')
+                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
+                    </div>
+
                     <div class="space-y-4">
                         <div class="flex items-center">
                             <input type="checkbox" name="show_progress_bar" id="show_progress_bar" value="1"
@@ -294,9 +305,16 @@
         formData.append('required', requiredCheckbox.checked ? '1' : '0'); // Add as string '1' or '0'
         
         // Set order to the current number of fields + 1
-        const currentFields = document.querySelectorAll('#form-fields > div').length;
-        formData.set('order', currentFields + 1);
-        
+        const fieldId = document.getElementById('field-id').value;
+        const url = fieldId ? `/forms/{{ $form->id }}/fields/${fieldId}` : `/forms/{{ $form->id }}/fields`;
+        const method = fieldId ? 'PUT' : 'POST';
+
+        if (!fieldId) {
+            // Only set order for new fields
+            const currentFields = document.querySelectorAll('#form-fields > div').length;
+            formData.set('order', currentFields + 1);
+        }
+
         // Handle options for select, radio, and checkbox fields
         const type = formData.get('type');
         if (['select', 'radio', 'checkbox'].includes(type)) {
@@ -312,10 +330,6 @@
                 formData.append(`options[${index}]`, option);
             });
         }
-
-        const fieldId = document.getElementById('field-id').value;
-        const url = fieldId ? `/forms/{{ $form->id }}/fields/${fieldId}` : `/forms/{{ $form->id }}/fields`;
-        const method = fieldId ? 'PUT' : 'POST';
 
         fetch(url, {
             method: method,
@@ -359,7 +373,6 @@
                 const optionsContainer = document.getElementById('options-container');
                 const optionsList = document.getElementById('options-list');
                 optionsList.innerHTML = '';
-                
                 if (['select', 'radio', 'checkbox'].includes(field.type)) {
                     optionsContainer.classList.remove('hidden');
                     if (field.options && field.options.length > 0) {

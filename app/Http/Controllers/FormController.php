@@ -88,11 +88,13 @@ class FormController extends Controller
             'allow_multiple_responses' => 'boolean',
             'collect_email' => 'boolean',
             'require_email' => 'boolean',
+            'auto_unpublish_at' => 'nullable|date',
         ]);
 
         $form->update([
             ...$validated,
             'slug' => Str::slug($validated['title']),
+            'auto_unpublish_at' => $validated['auto_unpublish_at'] ?? null,
         ]);
 
         return redirect()->route('forms.edit', $form)
@@ -133,7 +135,10 @@ class FormController extends Controller
     {
         $this->authorize('view', $form);
 
-        $totalResponses = $form->responses()->count();
+        // Eager load fields and responses
+        $form->load(['fields', 'responses']);
+
+        $totalResponses = $form->responses->count();
         $responsesByDate = $form->responses()
             ->selectRaw('DATE(created_at) as date, COUNT(*) as count')
             ->groupBy('date')
@@ -191,14 +196,14 @@ class FormController extends Controller
         // Validate the submission
         $validated = $request->validate($rules);
 
-        // Transform the data to use field labels as keys
+        // Transform the data to use field IDs as keys
         $responseData = [];
         foreach ($fields as $field) {
-            $value = $validated["fields.{$field->id}"] ?? null;
+            $value = $validated['fields'][$field->id] ?? null;
             if ($field->type === 'checkbox' && is_array($value)) {
                 $value = implode(', ', $value);
             }
-            $responseData[$field->label] = $value;
+            $responseData[$field->id] = $value;
         }
 
         // Create the response

@@ -39,16 +39,61 @@
                         <div class="space-y-6">
                             @foreach($form->fields as $field)
                                 <div>
-                                    <h4 class="text-sm font-medium text-gray-700">{{ $field->label }}</h4>
-                                    <div class="mt-2">
-                                        @if(in_array($field->type, ['select', 'radio', 'checkbox']))
-                                            <div class="h-48">
-                                                <canvas id="fieldChart_{{ $field->id }}"></canvas>
+                                    <h4 class="text-sm font-medium text-gray-700 mb-2">{{ $field->label }}</h4>
+                                    @php
+                                        $responses = $form->responses->pluck('responses.' . $field->id)->filter(fn($v) => $v !== null && $v !== '');
+                                        $total = $responses->count();
+                                    @endphp
+                                    @if(in_array($field->type, ['select', 'radio', 'checkbox']))
+                                        <table class="min-w-full divide-y divide-gray-200 mb-4">
+                                            <thead>
+                                                <tr>
+                                                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Option</th>
+                                                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Count</th>
+                                                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Percentage</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach($field->options as $option)
+                                                    @php
+                                                        $count = $responses->reduce(function($carry, $response) use ($option) {
+                                                            if (is_array($response)) {
+                                                                return $carry + (in_array($option, $response) ? 1 : 0);
+                                                            }
+                                                            if (is_string($response) && str_contains($response, ',')) {
+                                                                return $carry + (in_array($option, array_map('trim', explode(',', $response))) ? 1 : 0);
+                                                            }
+                                                            return $carry + ($response === $option ? 1 : 0);
+                                                        }, 0);
+                                                        $percent = $total > 0 ? round(($count / $total) * 100, 1) : 0;
+                                                    @endphp
+                                                    <tr>
+                                                        <td class="px-4 py-2 text-sm text-gray-700">{{ $option }}</td>
+                                                        <td class="px-4 py-2 text-sm text-gray-700">{{ $count }}</td>
+                                                        <td class="px-4 py-2 text-sm text-gray-700">{{ $percent }}%</td>
+                                                    </tr>
+                                                @endforeach
+                                            </tbody>
+                                        </table>
+                                        <p class="text-xs text-gray-500 mb-4">Total responses: {{ $total }}</p>
+                                    @else
+                                        @if($total > 0)
+                                            <button type="button" class="text-indigo-600 hover:underline text-sm mb-2" onclick="toggleTextResponses('responses-{{ $field->id }}')">View Text Responses</button>
+                                            <div id="responses-{{ $field->id }}" class="hidden border rounded p-4 mb-4 bg-gray-50">
+                                                <ul class="space-y-2">
+                                                    @foreach($form->responses->where('responses.' . $field->id, '!=', null)->sortByDesc('created_at') as $response)
+                                                        @php $value = $response->responses[$field->id] ?? null; @endphp
+                                                        @if($value !== null && $value !== '')
+                                                            <li class="border-b pb-2">
+                                                                <span class="block text-gray-800">{{ $value }}</span>
+                                                                <span class="block text-xs text-gray-500">{{ $response->created_at->format('Y-m-d H:i:s') }}</span>
+                                                            </li>
+                                                        @endif
+                                                    @endforeach
+                                                </ul>
                                             </div>
-                                        @else
-                                            <p class="text-sm text-gray-500">Response type: {{ ucfirst($field->type) }}</p>
                                         @endif
-                                    </div>
+                                    @endif
                                 </div>
                             @endforeach
                         </div>
@@ -62,7 +107,6 @@
 @push('scripts')
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    // Responses Over Time Chart
     const responsesCtx = document.getElementById('responsesChart').getContext('2d');
     new Chart(responsesCtx, {
         type: 'line',
@@ -89,50 +133,14 @@
         }
     });
 
-    // Field Response Charts
-    @foreach($form->fields as $field)
-        @if(in_array($field->type, ['select', 'radio', 'checkbox']))
-            const fieldCtx_{{ $field->id }} = document.getElementById('fieldChart_{{ $field->id }}').getContext('2d');
-            const responses_{{ $field->id }} = {!! json_encode($form->responses->pluck('responses.' . $field->label)) !!};
-            const options_{{ $field->id }} = {!! json_encode($field->options) !!};
-            
-            // Count responses for each option
-            const counts_{{ $field->id }} = options_{{ $field->id }}.map(option => {
-                return responses_{{ $field->id }}.filter(response => {
-                    if (Array.isArray(response)) {
-                        return response.includes(option);
-                    }
-                    return response === option;
-                }).length;
-            });
-
-            new Chart(fieldCtx_{{ $field->id }}, {
-                type: 'bar',
-                data: {
-                    labels: options_{{ $field->id }},
-                    datasets: [{
-                        label: 'Responses',
-                        data: counts_{{ $field->id }},
-                        backgroundColor: 'rgba(79, 70, 229, 0.5)',
-                        borderColor: 'rgb(79, 70, 229)',
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            ticks: {
-                                stepSize: 1
-                            }
-                        }
-                    }
-                }
-            });
-        @endif
-    @endforeach
+    function toggleTextResponses(id) {
+        var el = document.getElementById(id);
+        if (el.classList.contains('hidden')) {
+            el.classList.remove('hidden');
+        } else {
+            el.classList.add('hidden');
+        }
+    }
 </script>
 @endpush
 @endsection 

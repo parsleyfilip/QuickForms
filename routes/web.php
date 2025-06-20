@@ -47,6 +47,7 @@ Route::middleware('auth')->group(function () {
         Route::put('forms/{form}/fields/{field}', [FormFieldController::class, 'update'])->name('form-fields.update');
         Route::delete('forms/{form}/fields/{field}', [FormFieldController::class, 'destroy'])->name('form-fields.destroy');
         Route::post('forms/{form}/fields/reorder', [FormFieldController::class, 'reorder'])->name('form-fields.reorder');
+        Route::get('forms/{form}/fields/{field}', [FormFieldController::class, 'show'])->name('form-fields.show');
         
         // Form responses
         Route::get('forms/{form}/responses', [FormResponseController::class, 'index'])->name('form-responses.index');

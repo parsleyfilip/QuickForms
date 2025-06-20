@@ -33,51 +33,9 @@
                         @enderror
                     </div>
 
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div>
-                            <label for="theme_color" class="block text-sm font-medium text-gray-700">Theme Color</label>
-                            <div class="mt-1 flex rounded-md shadow-sm">
-                                <input type="color" name="theme_color" id="theme_color" value="{{ old('theme_color', '#4F46E5') }}"
-                                    class="h-10 w-20 rounded-l-md border-gray-300">
-                                <input type="text" value="{{ old('theme_color', '#4F46E5') }}"
-                                    class="flex-1 min-w-0 block w-full rounded-none rounded-r-md border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                                    readonly>
-                            </div>
-                        </div>
+                    
 
-                        <div>
-                            <label for="background_color" class="block text-sm font-medium text-gray-700">Background Color</label>
-                            <div class="mt-1 flex rounded-md shadow-sm">
-                                <input type="color" name="background_color" id="background_color" value="{{ old('background_color', '#FFFFFF') }}"
-                                    class="h-10 w-20 rounded-l-md border-gray-300">
-                                <input type="text" value="{{ old('background_color', '#FFFFFF') }}"
-                                    class="flex-1 min-w-0 block w-full rounded-none rounded-r-md border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                                    readonly>
-                            </div>
-                        </div>
-
-                        <div>
-                            <label for="button_color" class="block text-sm font-medium text-gray-700">Button Color</label>
-                            <div class="mt-1 flex rounded-md shadow-sm">
-                                <input type="color" name="button_color" id="button_color" value="{{ old('button_color', '#4F46E5') }}"
-                                    class="h-10 w-20 rounded-l-md border-gray-300">
-                                <input type="text" value="{{ old('button_color', '#4F46E5') }}"
-                                    class="flex-1 min-w-0 block w-full rounded-none rounded-r-md border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                                    readonly>
-                            </div>
-                        </div>
-
-                        <div>
-                            <label for="button_text_color" class="block text-sm font-medium text-gray-700">Button Text Color</label>
-                            <div class="mt-1 flex rounded-md shadow-sm">
-                                <input type="color" name="button_text_color" id="button_text_color" value="{{ old('button_text_color', '#FFFFFF') }}"
-                                    class="h-10 w-20 rounded-l-md border-gray-300">
-                                <input type="text" value="{{ old('button_text_color', '#FFFFFF') }}"
-                                    class="flex-1 min-w-0 block w-full rounded-none rounded-r-md border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                                    readonly>
-                            </div>
-                        </div>
-                    </div>
+                        
 
                     <div class="space-y-4">
                         <div class="flex items-center">

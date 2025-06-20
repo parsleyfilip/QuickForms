@@ -172,23 +172,47 @@
 @if($form->show_progress_bar)
     @push('scripts')
     <script>
+    document.addEventListener('DOMContentLoaded', function() {
         const form = document.querySelector('form');
         const progressBar = document.getElementById('progress-bar');
+        if (!form || !progressBar) return;
         const requiredFields = form.querySelectorAll('[required]');
         const totalFields = requiredFields.length;
 
+        function isFieldFilled(field) {
+            if (field.type === 'radio') {
+                const group = form.querySelectorAll(`input[name='${field.name}']`);
+                return Array.from(group).some(radio => radio.checked);
+            }
+            if (field.type === 'checkbox') {
+                const group = form.querySelectorAll(`input[name='${field.name}']`);
+                return Array.from(group).some(checkbox => checkbox.checked);
+            }
+            if (field.tagName === 'SELECT') {
+                return field.value !== '';
+            }
+            return field.value.trim() !== '';
+        }
+
         function updateProgress() {
-            const filledFields = Array.from(requiredFields).filter(field => field.value.trim() !== '').length;
+            const filledFields = Array.from(requiredFields).filter(isFieldFilled).length;
             const progress = (filledFields / totalFields) * 100;
             progressBar.style.width = `${progress}%`;
         }
 
         requiredFields.forEach(field => {
             field.addEventListener('input', updateProgress);
+            field.addEventListener('change', updateProgress);
+            if (field.type === 'radio' || field.type === 'checkbox') {
+                const group = form.querySelectorAll(`input[name='${field.name}']`);
+                group.forEach(el => {
+                    el.addEventListener('change', updateProgress);
+                });
+            }
         });
 
-        // Initial progress check
         updateProgress();
+    });
     </script>
     @endpush
 @endif

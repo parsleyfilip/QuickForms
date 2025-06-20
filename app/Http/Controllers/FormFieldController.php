@@ -83,4 +83,10 @@ class FormFieldController extends BaseController
 
         return response()->json(['message' => 'Fields reordered successfully']);
     }
+
+    public function show(Form $form, FormField $field)
+    {
+        $this->authorize('update', $form);
+        return response()->json($field);
+    }
 }
