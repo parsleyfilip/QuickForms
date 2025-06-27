@@ -98,9 +98,7 @@
                     <!-- Team Member 1 -->
                     <div class="text-center">
                         <div class="flex justify-center">
-                            <div class="h-32 w-32 rounded-full overflow-hidden">
-                                <img class="h-full w-full object-cover" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="Filip Pietruszka">
-                            </div>
+                            
                         </div>
                         <div class="mt-4">
                             <h3 class="text-lg font-medium text-gray-900">Filip Pietruszka</h3>
@@ -111,9 +109,7 @@
                     <!-- Team Member 2 -->
                     <div class="text-center">
                         <div class="flex justify-center">
-                            <div class="h-32 w-32 rounded-full overflow-hidden">
-                                <img class="h-full w-full object-cover" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="Nigel Bescholtz">
-                            </div>
+                         
                         </div>
                         <div class="mt-4">
                             <h3 class="text-lg font-medium text-gray-900">Nigel Bescholtz</h3>
@@ -124,9 +120,7 @@
                     <!-- Team Member 3 -->
                     <div class="text-center">
                         <div class="flex justify-center">
-                            <div class="h-32 w-32 rounded-full overflow-hidden">
-                                <img class="h-full w-full object-cover" src="https://images.unsplash.com/photo-1519244703995-f4e0f30006d5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="Sam Varkevisser">
-                            </div>
+                            
                         </div>
                         <div class="mt-4">
                             <h3 class="text-lg font-medium text-gray-900">Sam Varkevisser</h3>
@@ -137,9 +131,7 @@
                     <!-- Team Member 4 -->
                     <div class="text-center">
                         <div class="flex justify-center">
-                            <div class="h-32 w-32 rounded-full overflow-hidden">
-                                <img class="h-full w-full object-cover" src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="Noah Stortenbeker">
-                            </div>
+                          
                         </div>
                         <div class="mt-4">
                             <h3 class="text-lg font-medium text-gray-900">Noah Stortenbeker</h3>

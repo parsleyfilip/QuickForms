@@ -1,4 +1,8 @@
 <x-guest-layout>
+    <div class="mb-6 text-center">
+        <h2 class="text-2xl font-bold text-gray-800">Create an Account</h2>
+        <p class="mt-1 text-sm text-gray-500">Sign up to start using QuickForms.</p>
+    </div>
     <form method="POST" action="{{ route('register') }}">
         @csrf
 
@@ -39,14 +43,16 @@
             <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
         </div>
 
-        <div class="flex items-center justify-end mt-4">
-            <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('login') }}">
-                {{ __('Already registered?') }}
-            </a>
-
-            <x-primary-button class="ms-4">
-                {{ __('Register') }}
-            </x-primary-button>
+        <div class="flex items-center justify-between mt-4">
+            <div></div>
+            <div class="flex gap-2">
+                <a href="{{ route('login') }}">
+                    <x-secondary-button type="button">Login</x-secondary-button>
+                </a>
+                <x-primary-button>
+                    {{ __('Register') }}
+                </x-primary-button>
+            </div>
         </div>
     </form>
 </x-guest-layout>

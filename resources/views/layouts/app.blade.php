@@ -15,7 +15,7 @@
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
     <body class="font-sans antialiased">
-        <div class="min-h-screen bg-gray-100">
+        <div class="min-h-screen bg-gray-100" style="background-image: url('https://www.transparenttextures.com/patterns/wave-grid.png'); background-repeat: repeat;">
             @include('layouts.navigation')
 
             <!-- Page Heading -->
@@ -29,8 +29,9 @@
 
             <!-- Page Content -->
             <main>
-                @yield('content')
-            </main>
+    {{ $slot ?? '' }}
+    @yield('content')
+</main>
         </div>
 
         <!-- Footer -->
